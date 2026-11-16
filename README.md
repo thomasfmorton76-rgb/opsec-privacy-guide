@@ -100,18 +100,20 @@ CC0 1.0 Universal (Public Domain Dedication)
 
 To the extent possible under law, the author has waived all copyright and related or neighboring rights to this work.
 
-high-opsec-amnesic-workflow/
-├── README.md
-├── docs/
-│   ├── 01-hardware-firmware.md
-│   ├── 02-network-isolation.md
-│   ├── 03-browser-session-hygiene.md
-│   └── 04-stylometry-anonymization.md
-├── scripts/
-│   └── opsec-session-prep.sh
-└── LICENSE
+## Automated Session Setup (`scripts/opsec-session-prep.sh`)
 
+To automate notification suppression, MAC address verification, and offline text processing inside Tails:
 
-
+1. **Offline Preparation (One-Time Setup):**
+   * Download `argostranslate` wheels and offline `.argosmodel` files (e.g., `en_de` and `de_en`) onto a secondary read-only USB drive.
+   * Keep a copy of `scripts/opsec-session-prep.sh` on that read-only USB drive rather than unlocking Persistent Storage during sensitive sessions.
+2. **Per-Session Execution:**
+   * Boot Tails OS and set an **Administration Password** on the Welcome Screen.
+   * Plug in your read-only tools USB, copy `opsec-session-prep.sh` to `/tmp/`, and unplug the USB drive.
+   * Run the script:
+     ```bash
+     bash /tmp/opsec-session-prep.sh
+     ```
+   * Draft your message in `/tmp/draft.txt`, run the stylometry helper, and wipe your clipboard immediately after pasting.
 
 
