@@ -1,48 +1,107 @@
-# opsec-privacy-guide# 🛡️ High-Anonymity OpSec & Privacy Playbook
+high-opsec-amnesic-workflow/
+├── README.md
+├── docs/
+│   ├── 01-hardware-firmware.md
+│   ├── 02-network-isolation.md
+│   ├── 03-browser-session-hygiene.md
+│   └── 04-stylometry-anonymization.md
+└── LICENSE
+# High-OpSec Amnesic Workstation Guide
 
-A practical, layered guide to achieving strong digital anonymity. This framework combines hardened firmware, amnesic operating systems, network obfuscation, and anti-stylometry techniques to minimize digital footprints and resist advanced tracking.
+A practical, defense-in-depth operational security (OpSec) guide for maintaining strong anonymity and physical device integrity. This framework combines open-source firmware, an amnesic operating system, strict network isolation, and stylometric countermeasures.
 
-> **⚠️ Disclaimer:** Strong anonymity relies on strict operational discipline. A single slip in habit—such as logging into a personal account or leaking local metadata—can compromise an otherwise hardened technical setup.
-
----
-
-## 🏗️ The 4-Layer Anonymity Stack
-
-### Layer 1: Hardware & Firmware Integrity
-* **Open-Source Firmware (Libreboot):** Replaces proprietary BIOS/UEFI firmware to eliminate low-level backdoors and remove telemetry subsystems like the Intel Management Engine (ME).
-* **Physical Tamper Inspection:** Regularly inspect USB ports, keyboards, and internal motherboard headers for hardware keyloggers or unauthorized implants.
-* **✨ Improvement — Peripheral & Microphone Hygiene:** Physically disconnect or disable internal microphones, webcams, and Bluetooth modules at the hardware or BIOS level.
-
-### Layer 2: Operating System & Network Obfuscation
-* **Amnesic OS (Tails):** Boots entirely into RAM from a read-only USB drive, leaving zero forensic trace on the host machine's storage once shut down.
-* **Tor Bridges (obfs4 / Snowflake):** Conceals the fact that you are connecting to the Tor network from your ISP or local network administrator.
-* **Network Isolation:** Never connect from home, work, or personal mobile hotspots. Use transient, unassociated public Wi-Fi networks.
-* **✨ Improvement — MAC Address Spoofing & RF Awareness:** Ensure MAC address spoofing is enabled in Tails before connecting to public Wi-Fi. Keep personal smartphones powered off or in a Faraday bag while traveling to and from the connection location to prevent cell-tower location correlation.
-
-### Layer 3: Browser & Session Discipline
-* **Maximum Security Level:** Set Tor Browser's Security Level to **Safest** to disable JavaScript, certain fonts, and media types commonly used in browser exploits.
-* **Anti-Fingerprinting:** Never resize or maximize the Tor Browser window. Keeping the default viewport prevents screen-resolution fingerprinting.
-* **Strict Account Isolation:** Never log into personal accounts, recovery emails, or services tied to your real-world identity.
-* **✨ Improvement — Compartmentalized Identities:** Use a fresh Tails boot (and a new Tor circuit) for every distinct persona or session so activities cannot be linked across time.
-
-### Layer 4: Content & Stylometry Defense
-* **Plain-Text Drafting:** Write all text in a bare-bones offline editor (like GNOME Text Editor or Vim) before pasting into the browser to prevent keystroke-dynamics tracking.
-* **Offline Round-Trip Translation:** Run drafted text through a local, offline translation model inside Tails (e.g., `English → German → English`) to neutralize personal grammar quirks, idioms, and writing cadence (stylometry).
-* **Suppress System Alerts:** Disable live network connection notifications and desktop pop-ups to prevent shoulder-surfing and screen-capture leaks.
-* **✨ Improvement — File & Metadata Scrubbing:** Before uploading any document or image, strip all EXIF, author, and timestamp metadata using **MAT2** (built into Tails).
+> **Disclaimer:** Security is a process, not a single configuration. This guide addresses high-risk threat models, such as targeted surveillance and network-level adversaries. Adapt these practices to match your specific threat model.
 
 ---
 
-## ✅ Pre-Session OpSec Checklist
+## Core Architecture Overview
 
-- [ ] **Environment:** Public location selected; personal phone left behind or in a Faraday bag.
-- [ ] **Hardware:** Ports checked for physical implants; webcam/mic physically blocked or disabled.
-- [ ] **Boot:** Tails OS booted cleanly from trusted media; MAC spoofing active.
-- [ ] **Network:** Connected to public Wi-Fi using a Tor Bridge; system notifications muted.
-- [ ] **Browser:** Tor Browser set to **Safest**; window size left completely untouched.
-- [ ] **Content:** Text drafted offline, passed through local round-trip translation, and scrubbed of metadata.
+1. **Hardware & Firmware Layer:** Eliminating proprietary backdoors and physical tampering vectors.
+2. **Operating System Layer:** Using a live, amnesic OS to leave zero forensic trace on local storage.
+3. **Network Layer:** Masking Tor usage and preventing physical location correlation.
+4. **Application & Behavioral Layer:** Preventing browser fingerprinting, account correlation, and linguistic identification.
 
 ---
 
-## 🤝 Contributing
-Security practices evolve constantly. Feel free to submit a Pull Request to refine techniques, update offline translation model recommendations, or improve threat-modeling notes.
+## Repository Contents
+
+* **[01. Hardware & Firmware Hardening](docs/01-hardware-firmware.md):** Libreboot, physical tamper checks, and hardware kill switches.
+* **[02. Network & Location Isolation](docs/02-network-isolation.md):** Tails OS, Tor bridges, public Wi-Fi hygiene, and MAC address spoofing.
+* **[03. Browser & Session Hygiene](docs/03-browser-session-hygiene.md):** Tor Browser security levels, window sizing, and identity compartmentalization.
+* **[04. Stylometry & Text Anonymization](docs/04-stylometry-anonymization.md):** Offline round-trip translation, metadata scrubbing, and clipboard safety.
+
+---
+
+## Quick-Start Checklist
+
+* [ ] Verify Libreboot firmware checksums and inspect chassis for hardware implants.
+* [ ] Boot Tails OS from a read-only or verified USB drive (internal drives disconnected).
+* [ ] Spoof MAC address and connect only to unassociated public Wi-Fi networks.
+* [ ] Enable Tor Bridges (obfs4 or Snowflake) and disable network connection alerts.
+* [ ] Set Tor Browser Security Level to **Safest** and keep the default window size.
+* [ ] Draft text offline, run local round-trip translation, scrub metadata, and paste into the browser.
+* [ ] Never log into personal accounts or reuse aliases across # 01. Hardware & Firmware Hardening
+
+Software anonymity fails if the underlying hardware or firmware is compromised.
+
+### Current Practices
+* **Libreboot Firmware:** Replaces proprietary BIOS/UEFI firmware and neutralizes low-level management engines (such as Intel ME or AMD PSP) that operate independently of the main CPU.
+* **Hardware Implant & Keylogger Removal:** Physical inspection of USB ports, internal headers, and keyboards to detect unauthorized hardware interceptors.
+
+### Recommended Improvements
+* **Physical Tamper-Evident Seals:** Apply serialized tamper-evident tape or custom nail polish with glitter patterns over chassis screws and ports. Photograph the pattern to detect physical access while away from the device.
+* **Hardware Kill Switches:** Physically disconnect or remove internal microphones, webcams, Bluetooth modules, and internal storage drives. If your laptop lacks hardware switches, desolder or unplug the internal cables.
+* **Trusted Boot Media:** Store Tails OS on a USB drive with a physical write-protect switch (e.g., Kanguru Flashblu30) to prevent persistent malware from infecting the boot medium.
+* **RF Shielding:** Store the device in a tested Faraday bag when transporting it to prevent wireless wake-up signals or location # 02. Network & Location Isolation
+
+Protecting your physical location requires separating your real-world identity from your network exit point.
+
+### Current Practices
+* **Tails OS:** Routes all traffic through the Tor network and wipes RAM upon shutdown, leaving no local disk artifacts.
+* **Tor Bridges:** Conceals the fact that you are connecting to the Tor network from local ISPs or network administrators.
+* **Avoiding Personal/Home Wi-Fi:** Prevents direct association between your home IP address, residential billing records, and Tor entry guard timestamps.
+* **Hiding Network Connection Alerts:** Suppresses visual notifications that could alert nearby observers or shoulder-surfers to active network states.
+
+### Recommended Improvements
+* **Public Wi-Fi Operational Hygiene:**
+  * Never visit the same public Wi-Fi location on a predictable schedule.
+  * Avoid locations with heavy CCTV coverage, license plate readers, or mandatory SMS/captive-portal registration.
+  * Leave personal mobile phones powered off in a Faraday bag or at home. Carrying a personal phone to the same Wi-Fi hotspot creates a direct physical correlation via cell tower and Wi-Fi probe logs.
+* **MAC Address Spoofing:** Ensure Tails MAC address anonymization is active before connecting to any Wi-Fi access point so your network card's hardware ID cannot be logged across different locations.
+* **Bridge Rotation:** Request fresh `obfs4` or `WebTunnel` bridges periodically rather than relying on a single static bridge over long periods.
+* **Disable Captive Portal Unsafe Browser Risk:** If a public network requires a captive portal login, complete it quickly using Tails' Unsafe Browser, then immediately close it and restart Tor before doing any sensitive work.# 03. Browser & Session Hygiene
+
+Even over Tor, browser behavior and session habits can uniquely fingerprint you.
+
+### Current Practices
+* **Tor Browser on "Safest" Mode:** Disables JavaScript, certain fonts, math symbols, and media formats to eliminate the largest browser attack surfaces.
+* **Default Window Size:** Avoid maximizing or resizing the Tor Browser window, preventing websites from identifying your screen resolution via viewport dimensions.
+* **Zero Account Logins:** Never log into personal, historical, or non-anonymous accounts during the session.
+
+### Recommended Improvements
+* **Strict Compartmentalization:** Use one Tails session per distinct persona or task. Reboot Tails completely between unrelated tasks to clear RAM, circuit states, and temporary caches.
+* **No Browser Extensions:** Never install additional add-ons or extensions into Tor Browser, as they alter your browser fingerprint and break uniformity with other Tor users.
+* **Onion Services First:** Whenever available, use `.onion` addresses instead of clearnet URLs to keep traffic entirely within the Tor network and avoid exit-node eavesdropping.
+* **Disable WebRTC & Audio Fingerprinting:** Keep default Tails configurations intact, as they block WebRTC IP leaks and standardize canvas/audio outputs.# 04. Stylometry & Text Anonymization
+
+Adversaries use stylometry—analyzing word choice, punctuation, sentence length, and spelling quirks—to link anonymous texts to known authors.
+
+### Current Practices
+* **Offline Drafting & Pasting:** Writing in a plain text editor offline prevents websites from capturing keystroke dynamics (typing speed, pauses, and backspace patterns) via timing attacks.
+* **Local Round-Trip Translation:** Running text through an offline translation model inside Tails (e.g., English → German → English) alters syntax, idioms, and vocabulary to mask natural writing habits.
+
+### Recommended Improvements
+* **Multi-Hop Translation Pivot:** Instead of a single language pair, translate through two structurally different language families locally (e.g., English → Japanese → German → English) using offline models like Argos Translate or MarianNMT.
+* **Manual Post-Processing Pass:** Automated translation can introduce distinct "translationese" artifacts. After round-trip translation, manually simplify overly formal phrasing, standardize punctuation (e.g., remove em-dashes or semicolons), and normalize regional spelling (US vs. UK English).
+* **Metadata Scrubbing:** If uploading files or images instead of plain text, always run **MAT2** (Metadata Anonymisation Toolkit 2, pre-installed in Tails) to strip EXIF data, author names, timestamps, and software versions.
+* **Clipboard Clearing:** Clear the system clipboard immediately after pasting sensitive text into the browser so unintended pastes do not leak data into another window.
+
+CC0 1.0 Universal (Public Domain Dedication)
+
+To the extent possible under law, the author has waived all copyright and related or neighboring rights to this work.
+
+
+
+
+
+
