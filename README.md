@@ -100,6 +100,16 @@ CC0 1.0 Universal (Public Domain Dedication)
 
 To the extent possible under law, the author has waived all copyright and related or neighboring rights to this work.
 
+high-opsec-amnesic-workflow/
+├── README.md
+├── docs/
+│   ├── 01-hardware-firmware.md
+│   ├── 02-network-isolation.md
+│   ├── 03-browser-session-hygiene.md
+│   └── 04-stylometry-anonymization.md
+├── scripts/
+│   └── opsec-session-prep.sh
+└── LICENSE
 
 
 
